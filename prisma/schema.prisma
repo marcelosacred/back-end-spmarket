@@ -118,7 +118,7 @@ model Review {
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @map("user_id")
 
-  product Product? @relation(fields: [productId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
   productId String? @map("product_id")
 
   store   Store?  @relation(fields: [storeId], references: [id])
