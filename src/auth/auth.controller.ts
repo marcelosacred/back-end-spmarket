@@ -10,6 +10,8 @@ import { Response, Request } from 'express'
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto'
 import { AuthGuard } from '@nestjs/passport'
+import * as process from 'process'
+import { promises } from 'fs-extra'
 
 @Controller('auth')
 export class AuthController {
@@ -72,16 +74,40 @@ export class AuthController {
 
 	@Get('google')
 	@UseGuards(AuthGuard('google'))
-	async googleAuth(@Req() _req) {}
+	async googleAuth(@Req() req) {}
+
 
 	@Get('google/callback')
 	@UseGuards(AuthGuard('google'))
 	async googleAuthCallback(
-		@Req() req: any,
+		@Req() req,
 		@Res({ passthrough: true }) res: Response
-	) {}
+	) {
+		const { refreshToken, ...response } = await this.authService.validaOAuthLogin(req)
+		this.authService.addRefreshTokenToResponse(res, refreshToken)
+
+		return res.redirect(
+			`${process.env['CLIENT_URL']}/dashboard?accessToken=${response.accessToken}`
+		)
+	}
 
 	@Get('yandex')
 	@UseGuards(AuthGuard('yandex'))
-	async yandexAuth(@Req() _req) {}
+	async yandexAuth(@Req() req) {}
+
+	@Get('yandex/callback')
+	@UseGuards(AuthGuard('yandex'))
+	async yandexAuthCallback(
+		@Req() req,
+		@Res({ passthrough: true }) res: Response
+	) {
+		const { refreshToken, ...response } =
+			await this.authService.validaOAuthLogin(req)
+
+		this.authService.addRefreshTokenToResponse(res, refreshToken)
+
+		return res.redirect(
+			`${process.env['CLIENT_URL']}/dashboard?accessToken=${response.accessToken}`
+		)
+	}
 }

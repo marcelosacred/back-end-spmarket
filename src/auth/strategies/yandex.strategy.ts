@@ -18,7 +18,7 @@ export class YandexStrategy extends PassportStrategy(Strategy, 'yandex') {
 				   _refreshToken: string,
 				   profile: Profile,
 				   done: any
-	) {
+	): Promise<any> {
 		const { username, emails, photos } = profile
 
 		const user = {

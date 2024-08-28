@@ -49,6 +49,7 @@ export class AuthService {
 	issueToken(userId: string) {
 		const data = { id: userId }
 
+
 		const accessToken = this.jtw.sign(data, {
 			expiresIn: '1h'
 		})
@@ -68,7 +69,7 @@ export class AuthService {
 		return user
 	}
 
-	async validaOAuthUser(req: any) {
+	async validaOAuthLogin(req: any) {
 		let user = await this.userService.getByEmail(req.user.email)
 
 		if (!user) {
@@ -85,6 +86,10 @@ export class AuthService {
 				}
 			})
 		}
+		
+		const tokens = this.issueToken(user.id)
+
+		return { user, ...tokens }
 	}
 
 	addRefreshTokenToResponse(res: Response, refreshToken: string) {
