@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma.service'
 import { hash } from 'argon2'
 import { AuthDto } from '../auth/dto/auth.dto'
@@ -9,11 +9,13 @@ export class UserService {
 
 	async getById(id: string) {
 		const user = await this.prisma.user.findUnique({
-			where: {            // По чему искать. В данном случае по ID
+			where: {
+				// По чему искать. В данном случае по ID
 				id
 			},
-			include: {           // Что дополнительно отдать.
-				stores: true,    // В данном случае отдается информация о:
+			include: {
+				// Что дополнительно отдать.
+				stores: true, // В данном случае отдается информация о:
 				favorites: true, // 1. Магазинах, 2. Избранных товарах, 3. Заказах
 				orders: true
 			}
@@ -23,7 +25,7 @@ export class UserService {
 	}
 
 	async getByEmail(email: string) {
-		const user = this.prisma.user.findUnique({
+		const user = await this.prisma.user.findUnique({
 			where: {
 				email
 			},
