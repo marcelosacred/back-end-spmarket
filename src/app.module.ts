@@ -9,7 +9,6 @@ import { StoreModule } from './store/store.module';
 import { OrderModule } from './order/order.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { ProductModule } from './product/product.module';
-import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
